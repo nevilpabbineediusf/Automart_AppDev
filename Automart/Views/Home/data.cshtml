@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Cars Data";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - AutoDeals</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="logo-container">
+            <img src="~/images/logo.png" alt="AutoDeals Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-controller="Home" asp-action="Data" class="active">Cars Data</a></li>
+            <li><a asp-controller="Home" asp-action="Create">Create</a></li>
+            <li><a asp-controller="Home" asp-action="Read">Read</a></li>
+            <li><a asp-controller="Home" asp-action="Update">Update</a></li>
+            <li><a asp-controller="Home" asp-action="Delete">Delete</a></li>
+            <li><a asp-controller="Home" asp-action="About">About Us</a></li>
+        </ul>
+        <div class="auth-links">
+            <a asp-controller="Home" asp-action="SignIn">Sign In</a>
+            <a asp-controller="Home" asp-action="SignUp">Sign Up</a>
+        </div>
+
+    </nav>
+
+    <main>
+        <h2 style="text-align:center;">Car Insights Dashboard</h2>
+
+        <section>
+            <h3>Car Listings by Brand</h3>
+            <select id="brandSelect">
+                <option value="all">All Brands</option>
+                <option value="Honda">Honda</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Ford">Ford</option>
+                <option value="Tesla">Tesla</option>
+                <option value="Hyundai">Hyundai</option>
+            </select>
+            <canvas id="barChart" style="max-width: 600px; height: 300px;"></canvas>
+        </section>
+
+        <section style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">Fuel Type Distribution</h3>
+            <div style="width: 400px; height: 300px;">
+                <canvas id="pieChart" style="width: 100%; height: 100%;"></canvas>
+            </div>
+        </section>
+
+        <section>
+            <h3>Monthly Sales Trend</h3>
+            <select id="metricSelect">
+                <option value="revenue">Revenue (₹ Lakhs)</option>
+                <option value="units">Units Sold</option>
+            </select>
+            <canvas id="lineChart" style="max-width: 600px; height: 300px;"></canvas>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 AutoDeals | All rights reserved</p>
+    </footer>
+
+    <script>
+        // Bar Chart Data
+        const barChartData = {
+            labels: ['Honda', 'Hyundai', 'Tesla', 'Ford', 'Toyota'],
+            values: [8, 6, 4, 3, 2]
+        };
+
+        const ctxBar = document.getElementById('barChart');
+        const barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: barChartData.labels,
+                datasets: [{
+                    label: 'Listings Available',
+                    data: barChartData.values,
+                    backgroundColor: ['#f44336', '#2196f3', '#4caf50', '#ff9800', '#9c27b0']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        document.getElementById('brandSelect').addEventListener('change', function () {
+            const selected = this.value;
+            if (selected === 'all') {
+                barChart.data.labels = barChartData.labels;
+                barChart.data.datasets[0].data = barChartData.values;
+            } else {
+                const index = barChartData.labels.indexOf(selected);
+                barChart.data.labels = [barChartData.labels[index]];
+                barChart.data.datasets[0].data = [barChartData.values[index]];
+            }
+            barChart.update();
+        });
+
+        // Pie Chart
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Petrol', 'Diesel', 'Electric', 'Hybrid'],
+                datasets: [{
+                    label: 'Market Share',
+                    data: [45, 30, 15, 10],
+                    backgroundColor: ['#03a9f4', '#8bc34a', '#ff5722', '#9e9e9e']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Line Chart
+        const lineChartData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            revenue: [120, 160, 140, 170, 200],
+            units: [60, 75, 80, 95, 105]
+        };
+
+        const ctxLine = document.getElementById('lineChart');
+        const lineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: lineChartData.labels,
+                datasets: [{
+                    label: 'Revenue (₹ Lakhs)',
+                    data: lineChartData.revenue,
+                    borderColor: '#4caf50',
+                    fill: false,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        document.getElementById('metricSelect').addEventListener('change', function () {
+            const selected = this.value;
+            lineChart.data.datasets[0].data = lineChartData[selected];
+            lineChart.data.datasets[0].label = selected === 'revenue' ? 'Revenue (₹ Lakhs)' : 'Units Sold';
+            lineChart.update();
+        });
+    </script>
+</body>
+</html>

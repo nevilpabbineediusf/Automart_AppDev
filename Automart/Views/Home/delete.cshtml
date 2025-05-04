@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Delete Car";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AutoDeals</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <img src="~/images/logo.png" alt="AutoDeals Logo" />
+        </div>
+        <ul class="nav-links">
+            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a href="/data.html">Cars Data</a></li>
+            <li><a asp-controller="Home" asp-action="Create">Create</a></li>
+            <li><a asp-controller="Home" asp-action="Read">Read</a></li>
+            <li><a asp-controller="Home" asp-action="Update">Update</a></li>
+            <li><a asp-controller="Home" asp-action="Delete" class="active">Delete</a></li>
+            <li><a asp-controller="Home" asp-action="About">About Us</a></li>
+        </ul>
+        <div class="auth-links">
+            <a asp-controller="Home" asp-action="SignIn">Sign In</a>
+            <a asp-controller="Home" asp-action="SignUp">Sign Up</a>
+        </div>
+
+    </nav>
+
+    <section class="car-listing">
+        <h2>Delete Car Listings</h2>
+        <div id="car-list"></div>
+    </section>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="map-modal">
+        <span class="map-modal-close" onclick="closeDeleteModal()">×</span>
+        <form id="deleteForm" class="car-posting-form">
+            <h3 style="text-align:center; margin-bottom:1rem;">Why are you deleting this post?</h3>
+
+            <label for="reason">Select Reason:</label>
+            <select id="reason" name="reason" required>
+                <option value="">-- Choose --</option>
+                <option value="Sold">Sold</option>
+                <option value="Wrong Posting">Wrong Posting</option>
+                <option value="Don't want to sell anymore">Don't want to sell anymore</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <div style="display:flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="confirm-btn" style="flex:1; background-color: #d32f2f;">Confirm Delete</button>
+                <button type="button" class="confirm-btn" style="flex:1; background-color: #9e9e9e;" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 AutoDeals | All rights reserved</p>
+    </footer>
+
+    <script>
+        let selectedCarIndex = null;
+        let carsData = [];
+
+        fetch("/data/cars.json")
+            .then(response => response.json())
+            .then(cars => {
+                carsData = cars;
+                displayCars(cars);
+            })
+            .catch(error => {
+                console.error("Error fetching car data:", error);
+                document.getElementById("car-list").innerHTML = "<p>Failed to load car data.</p>";
+            });
+
+        function displayCars(carArray) {
+            const container = document.getElementById("car-list");
+            container.innerHTML = "";
+
+            if (carArray.length === 0) {
+                container.innerHTML = "<p>No available cars at the moment.</p>";
+                return;
+            }
+
+            carArray.forEach((car, index) => {
+                const carCard = document.createElement("div");
+                carCard.className = "car-card";
+
+                carCard.innerHTML = `
+                    <img src="${car.photos[0]}" alt="${car.brand} ${car.model}">
+                    <div class="car-info">
+                        <h3>${car.brand} ${car.model} (${car.year})</h3>
+                        <p><strong>Type:</strong> ${car.type}</p>
+                        <p><strong>Fuel:</strong> ${car.fuelType}</p>
+                        <p><strong>Mileage:</strong> ${car.mileage.toLocaleString()} km</p>
+                        <p><strong>Price:</strong> $${car.price.toLocaleString()}</p>
+                    </div>
+                    <div class="crud-buttons">
+                        <button class="btn" onclick="openDeleteModal(${index})">Delete</button>
+                    </div>
+                `;
+
+                container.appendChild(carCard);
+            });
+        }
+
+        function openDeleteModal(index) {
+            selectedCarIndex = index;
+            document.getElementById("deleteModal").style.display = "block";
+        }
+
+        function closeDeleteModal() {
+            selectedCarIndex = null;
+            document.getElementById("deleteModal").style.display = "none";
+        }
+
+        document.getElementById("deleteForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const reason = document.getElementById("reason").value;
+
+            if (!reason) {
+                alert("Please select a reason.");
+                return;
+            }
+
+            const car = carsData[selectedCarIndex];
+            alert(`Deleted "${car.brand} ${car.model}" due to: ${reason}`);
+            carsData.splice(selectedCarIndex, 1);
+            displayCars(carsData);
+            closeDeleteModal();
+        });
+    </script>
+
+</body>
+</html>
+

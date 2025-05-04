@@ -1,0 +1,113 @@
+[
+    {
+      "brand": "Toyota",
+      "model": "Camry",
+      "year": 2021,
+      "mileage": 32000,
+      "price": 23500,
+      "photos": ["https://vehicle-images.dealerinspire.com/e41a-110004390/thumbnails/large/4T1DAACKXSU600503/41025ee88719d4ec055af59b8db73af4.png"],
+      "type": "Sedan",
+      "fuelType": "Gasoline",
+      "address": "1600 Amphitheatre Parkway, Mountain View, CA"
+    },
+    {
+      "brand": "Toyota",
+      "model": "HighLander",
+      "year": 2022,
+      "mileage": 18000,
+      "price": 45000,
+      "photos": ["https://tmna.aemassets.toyota.com/is/image/toyota/toyota/jellies/max/2025/highlander/hybridlimited25thedition/6982/1l5/36/5.png?fmt=png-alpha&wid=930&qlt=90"],
+      "type": "SUV",
+      "fuelType": "Diesel",
+      "address": "1 Hacker Way, Menlo Park, CA"
+    },
+    {
+      "brand": "Honda",
+      "model": "Civic",
+      "year": 2020,
+      "mileage": 27000,
+      "price": 21000,
+      "photos": ["https://shop.hondanorth.net/wp-content/uploads/sites/112/2020/08/2019-Civic-e1597780846184.png"],
+      "type": "Sedan",
+      "fuelType": "Gasoline",
+      "address": "1600 Amphitheatre Parkway, Mountain View, CA"
+    },
+    {
+      "brand": "Honda",
+      "model": "CR-V",
+      "year": 2021,
+      "mileage": 24000,
+      "price": 29000,
+      "photos": ["https://autoimage.capitalone.com/stock-media/evox/2023-Honda-CR-V_Hybrid-Sport_Touring-SI-52391_cc2400_032_SI.png?width=640&height=480"],
+      "type": "SUV",
+      "fuelType": "Hybrid",
+      "address": "350 5th Ave, New York, NY"
+    },
+    {
+      "brand": "Ford",
+      "model": "Escape",
+      "year": 2019,
+      "mileage": 45000,
+      "price": 19500,
+      "photos": ["https://shop.ford.com/cmslibs/content/dam/vdm_ford/live/en_us/ford/nameplate/escape/2023/part/choose-your-model/CYPBYO_Escape_2023.png"],
+      "type": "SUV",
+      "fuelType": "Hybrid",
+      "address": "111 8th Ave, New York, NY"
+    },
+    {
+      "brand": "Ford",
+      "model": "Mustang",
+      "year": 2022,
+      "mileage": 12000,
+      "price": 55000,
+      "photos": ["https://www.vdm.ford.com/content/dam/na/ford/en_us/images/mustang/2025/jellybeans/Ford_Mustang_2025_200A_PJS_883_89W_13B_CON_64F_99H_44U_EBST_YZTAC_DEFAULT_EXT_1.png"],
+      "type": "Coupe",
+      "fuelType": "Gasoline",
+      "address": "600 Congress Ave, Austin, TX"
+    },
+    {
+      "brand": "Chevrolet",
+      "model": "Silverado",
+      "year": 2022,
+      "mileage": 15000,
+      "price": 35500,
+      "photos": ["https://di-uploads-pod20.dealerinspire.com/edwardschevydowntown/uploads/2024/03/2024-Chevy-Silverado-1500-RST-Model-Left.jpg"],
+      "type": "Truck",
+      "fuelType": "Diesel",
+      "address": "2211 North First Street, San Jose, CA"
+    },
+    {
+      "brand": "Tesla",
+      "model": "Model 3",
+      "year": 2023,
+      "mileage": 8000,
+      "price": 42000,
+      "photos": ["https://cdn.motor1.com/images/mgl/9og7b/s1/tesla-model-3-19-sport-wheels-design-studio-u.s.---october-2020.jpg"],
+      "type": "Electric Sedan",
+      "fuelType": "Electric",
+      "address": "3500 Deer Creek Road, Palo Alto, CA"
+    },
+    {
+      "brand": "Tesla",
+      "model": "Model X",
+      "year": 2022,
+      "mileage": 14000,
+      "price": 85000,
+      "photos": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFLjWffk_BQaGCdMjduwzxOCFq8X8t7vsrpA&s"],
+      "type": "Electric SUV",
+      "fuelType": "Electric",
+      "address": "3500 Deer Creek Road, Palo Alto, CA"
+    },
+    {
+      "brand": "BMW",
+      "model": "X5",
+      "year": 2021,
+      "mileage": 22000,
+      "price": 60000,
+      "photos": ["https://content.homenetiol.com/2000292/2224213/0x0/stock_images/8/cc_2025BMS19_01_640/cc_2025BMS190002_01_640_300.jpg"],
+      "type": "Luxury SUV",
+      "fuelType": "Gasoline",
+      "address": "300 N LaSalle Dr, Chicago, IL"
+    }
+  ]
+  

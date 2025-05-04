@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Dealer Home";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoDeals - Dealer Home</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <img src="/images/logo.png" alt="AutoDeals Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a asp-controller="Home" asp-action="Index" class="active">Home</a></li>
+            <li><a asp-controller="Home" asp-action="UserHome">User Home</a></li>
+            <li><a asp-controller="Home" asp-action="Data">Cars Data</a></li>
+            <li><a asp-controller="Home" asp-action="Create">Create</a></li>
+            <li><a asp-controller="Home" asp-action="Read">Read</a></li>
+            <li><a asp-controller="Home" asp-action="Update">Update</a></li>
+            <li><a asp-controller="Home" asp-action="Delete">Delete</a></li>
+            <li><a asp-controller="Home" asp-action="About">About</a></li>
+        </ul>
+
+        <div class="auth-links">
+            <a asp-controller="Home" asp-action="SignIn">Sign In</a>
+            <a asp-controller="Home" asp-action="SignUp">Sign Up</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Welcome to AutoMart</h1>
+        <p>Platform for dealers to sell new and used cars</p>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="🔍 Search by brand, model, year, type or fuel type....">
+        </div>
+    </header>
+
+    <!-- Search result display -->
+    <section class="car-listing">
+        <div id="car-list"></div>
+    </section>
+
+    <section class="featured-section">
+        <h2>Top Cars In USA</h2>
+        <button class="swipe-btn swipe-left" onclick="scrollFeatured(-1)">‹</button>
+        <div class="featured-scroll" id="featuredScroll">
+
+            <a href="https://www.caranddriver.com/rankings/best-suvs" target="_blank" class="featured-card featured-link-card">
+                <img src="https://www.shutterstock.com/image-photo/passenger-car-isolated-on-white-600nw-2293913871.jpg" alt="Top SUV">
+                <div class="content">
+                    <h4>Top SUVs</h4>
+                    <p>CRV, RAV4</p>
+                </div>
+            </a>
+
+            <a href="https://www.caranddriver.com/rankings/best-sedans" target="_blank" class="featured-card featured-link-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvOcdyJQF2ugLMRT1FSfONgMh5e-z1_M_jJg&s" alt="Top Sedan">
+                <div class="content">
+                    <h4>Top Sedans</h4>
+                    <p>Toyota camry, Volkswagen jetta</p>
+                </div>
+            </a>
+
+            <a href="https://www.caranddriver.com/features/g26594907/best-hatchbacks/" target="_blank" class="featured-card featured-link-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnAYVX-3uAPxllL-5q302FeJFaDl9NIa4BQA&s" alt="Top Hatchback">
+                <div class="content">
+                    <h4>Top Hatchbacks</h4>
+                    <p>Ford Focus, Mazda 3</p>
+                </div>
+            </a>
+
+            <a href="https://www.autocarindia.com/car-news/best-premium-suvs-in-india-2024-431943" target="_blank" class="featured-card featured-link-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI93_VycQJg_sbRXDAMV9ELdq-fmEMG02cwg&s" alt="SUV">
+                <div class="content">
+                    <h4>Premium SUVs</h4>
+                    <p>Toyota Highlander, Jeep Compass</p>
+                </div>
+            </a>
+
+            <a href="https://www.caranddriver.com/rankings/best-sedans/luxury" target="_blank" class="featured-card featured-link-card">
+                <img src="https://t3.ftcdn.net/jpg/09/94/74/46/360_F_994744607_OmGoooJLHKoOz39sdNjGqzGWZrhlT46U.jpg" alt="Sedan">
+                <div class="content">
+                    <h4>Luxury Sedans</h4>
+                    <p>Skoda Superb, Toyota Camry</p>
+                </div>
+            </a>
+            <a href="https://www.caranddriver.com/news/g29994375/future-electric-cars-trucks/" target="_blank" class="featured-card featured-link-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFQ1fsXey5XDu1Nr4I4KIq2kt_gDxGih7RvA&s" alt="Sedan">
+                <div class="content">
+                    <h4>Electric Cars</h4>
+                    <p>Tesla, BYD</p>
+                </div>
+            </a>
+
+        </div>
+        <button class="swipe-btn swipe-right" onclick="scrollFeatured(1)">›</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 AutoDeals | All rights reserved</p>
+    </footer>
+
+    <script src="~/js/index.js"></script>
+    <script src="~/js/scroll.js"></script>
+</body>
+</html>
+
+
+
