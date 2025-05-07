@@ -17,11 +17,11 @@
         </div>
         <ul class="nav-links">
             <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-            <li><a href="/data.html">Cars Data</a></li>
-            <li><a asp-controller="Home" asp-action="Create">Create</a></li>
-            <li><a asp-controller="Home" asp-action="Read">Read</a></li>
-            <li><a asp-controller="Home" asp-action="Update">Update</a></li>
-            <li><a asp-controller="Home" asp-action="Delete" class="active">Delete</a></li>
+            <li><a asp-controller="Home" asp-action="Data">Cars Data</a></li>
+            <li><a asp-controller="Home" asp-action="Create">Create Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Read">Review Cars</a></li>
+            <li><a asp-controller="Home" asp-action="Update">Modify Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Delete" class="active">Delete Posting</a></li>
             <li><a asp-controller="Home" asp-action="About">About Us</a></li>
         </ul>
         <div class="auth-links">
@@ -66,9 +66,12 @@
         let selectedCarIndex = null;
         let carsData = [];
 
-        fetch("/data/cars.json")
+        fetch("/CarListing/GetAllCars")
             .then(response => response.json())
             .then(cars => {
+                cars.forEach(car => {
+                    car.carTypeLabel = car.hasOwnProperty("usedCarID") ? "Used Car" : "New Car";
+                });
                 carsData = cars;
                 displayCars(cars);
             })
@@ -94,9 +97,9 @@
                     <img src="${car.photos[0]}" alt="${car.brand} ${car.model}">
                     <div class="car-info">
                         <h3>${car.brand} ${car.model} (${car.year})</h3>
-                        <p><strong>Type:</strong> ${car.type}</p>
+                        <p><strong>Type:</strong> ${car.carType}</p>
                         <p><strong>Fuel:</strong> ${car.fuelType}</p>
-                        <p><strong>Mileage:</strong> ${car.mileage.toLocaleString()} km</p>
+                        <p><strong>Mileage:</strong> ${car.mileage?.toLocaleString() ?? 'N/A'} km</p>
                         <p><strong>Price:</strong> $${car.price.toLocaleString()}</p>
                     </div>
                     <div class="crud-buttons">
@@ -128,13 +131,30 @@
             }
 
             const car = carsData[selectedCarIndex];
-            alert(`Deleted "${car.brand} ${car.model}" due to: ${reason}`);
-            carsData.splice(selectedCarIndex, 1);
-            displayCars(carsData);
-            closeDeleteModal();
+            const payload = {
+                id: car.usedCarID ?? car.newCarID,
+                isUsed: car.carTypeLabel === "Used Car",
+                reason: reason
+            };
+
+            fetch("/CarDelete/DeleteCar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.ok ? res.json() : res.text().then(msg => { throw new Error(msg); }))
+            .then(() => {
+                alert(`Deleted "${car.brand} ${car.model}" due to: ${reason}`);
+                carsData.splice(selectedCarIndex, 1);
+                displayCars(carsData);
+                closeDeleteModal();
+            })
+            .catch(err => {
+                console.error("Delete failed:", err.message);
+                alert("Delete failed: " + err.message);
+            });
         });
     </script>
 
 </body>
 </html>
-

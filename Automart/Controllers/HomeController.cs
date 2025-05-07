@@ -13,60 +13,23 @@ namespace Automart.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+        public IActionResult Privacy() => View();
+        public IActionResult Read() => View();
+        public IActionResult Create() => View();
+        public IActionResult Update() => View();
+        public IActionResult Delete() => View();
+        public IActionResult About() => View();
+        public IActionResult Data() => View();
+        public IActionResult SignIn() => View();
+        public IActionResult SignUp() => View();
+        public IActionResult UserHome() => View();
+        public IActionResult viewcars() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        public IActionResult Read()
-        {
-            return View();
-        }
-        public IActionResult Create()
-        {
-            return View();
-        }
-        public IActionResult Update()
-        {
-            return View();
-        }
-        public IActionResult Delete()
-        {
-            return View();
-        }
-        public IActionResult About()
-        {
-            return View();
-        }
-        public IActionResult Data()
-        {
-            return View();
-        }
-        public IActionResult SignIn()
-        {
-            return View();
-        }
-        public IActionResult SignUp()
-        {
-            return View();
-        }
-        public IActionResult UserHome()
-        {
-            return View();
-        }
-
-
-
     }
 }

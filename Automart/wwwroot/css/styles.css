@@ -620,15 +620,22 @@ footer {
     text-align: center;
 }
 
+/* Updated to horizontal scroll */
 .brand-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 1.5rem;
-    justify-items: center;
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5 rem;
+    padding: 1rem;
+    justify-content: flex-start;
     align-items: center;
-    margin: auto;
-    max-width: 1000px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
 }
+
+    .brand-grid::-webkit-scrollbar {
+        display: none; /* Optional: Hide scrollbar */
+    }
 
 .brand-item {
     background-color: #fafafa;
@@ -643,6 +650,8 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0; /* Prevent shrinking in horizontal scroll */
+    scroll-snap-align: start;
 }
 
     .brand-item:hover {
@@ -662,10 +671,8 @@ footer {
         color: #333;
         margin: 0;
     }
-
-
-  
-  
-  
-
-    
+<div class="repo-container" >
+<a href="https://github.com/nevilpabbineediusf/AutoMart_Group_3" target="_blank" >
+🔗 View our GitHub Repository
+</a >
+</div >

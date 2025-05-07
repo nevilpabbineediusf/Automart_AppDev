@@ -17,9 +17,9 @@
             <img src="~/images/logo.png" alt="AutoMart Logo" />
         </div>
         <ul class="nav-links">
-            <li><a href="#">NEW CARS</a></li>
-            <li><a href="#">USED CARS</a></li>
-            <li><a href="#">REVIEWS & NEWS</a></li>
+            <li><a asp-controller="Home" asp-action="UserHome">User Home</a></li>
+			<li><a asp-controller="Home" asp-action="Viewcars">View Cars</a></li>
+
         </ul>
     </nav>
 
@@ -66,14 +66,18 @@
     <script>
         let carsData = [];
 
-        fetch("/data/cars.json")
+        fetch("/CarListing/GetAllCars")
             .then(res => res.json())
             .then(data => {
                 carsData = data;
                 renderFeatured(data.slice(0, 4));
-                renderCategories(data.filter(c => c.type.includes("SUV") || c.type.includes("Sedan")));
+                renderCategories(data.filter(c => c.carType.includes("SUV") || c.carType.includes("Sedan")));
                 renderBrands(data);
                 renderCars(data); // initial load
+            })
+            .catch(error => {
+                console.error("Failed to load car data:", error);
+                document.getElementById("car-list").innerHTML = "<p>Error loading car data.</p>";
             });
 
         function renderFeatured(cars) {
@@ -101,7 +105,7 @@
         }
 
         function renderBrands(data) {
-            const brands = [...new Set(data.map(car => car.brand))].slice(0, 12); // pick first 12 brands
+            const brands = [...new Set(data.map(car => car.brand))].slice(0, 12);
             const brandHTML = brands.map(brand => `
                 <div class="brand-item" onclick="filterByBrand('${brand}')">
                     <img src="/images/brands/${brand.toLowerCase().replace(/\s/g, '')}.png" alt="${brand}" />

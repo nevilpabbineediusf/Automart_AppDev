@@ -15,24 +15,30 @@
         </div>
         <ul class="nav-links">
             <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-            <li><a href="/data.html">Cars Data</a></li>
-            <li><a asp-controller="Home" asp-action="Create" class="active">Create</a></li>
-            <li><a asp-controller="Home" asp-action="Read">Read</a></li>
-            <li><a asp-controller="Home" asp-action="Update">Update</a></li>
-            <li><a asp-controller="Home" asp-action="Delete">Delete</a></li>
+            <li><a asp-controller="Home" asp-action="Data">Cars Data</a></li>
+            <li><a asp-controller="Home" asp-action="Create" class="active">Create Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Read">Review Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Update">Modify Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Delete">Delete Posting</a></li>
             <li><a asp-controller="Home" asp-action="About">About Us</a></li>
         </ul>
         <div class="auth-links">
             <a asp-controller="Home" asp-action="SignIn">Sign In</a>
             <a asp-controller="Home" asp-action="SignUp">Sign Up</a>
         </div>
-
     </nav>
 
     <!-- Form Section -->
     <div class="car-posting-form" id="formSection">
-        <h2>Post a New Car</h2>
+        <h2>Post a Car</h2>
         <form id="carForm">
+            <label for="carCategory">Car:</label>
+            <select id="carCategory" name="carCategory" required onchange="toggleUsedFields()">
+                <option value="">-- Select --</option>
+                <option value="New">New Car</option>
+                <option value="Used">Used Car</option>
+            </select>
+
             <label for="brand">Brand:</label>
             <input type="text" id="brand" name="brand" required>
 
@@ -68,8 +74,14 @@
                 <option value="Electric">Electric</option>
             </select>
 
-            <label for="mileage">Mileage (in miles):</label>
-            <input type="number" id="mileage" name="mileage" required>
+            <!-- Used-only fields -->
+            <div id="usedFields" style="display: none;">
+                <label for="mileage">Mileage (in miles):</label>
+                <input type="number" id="mileage" name="mileage">
+
+                <label for="ownerId">Owner ID:</label>
+                <input type="text" id="ownerId" name="ownerId">
+            </div>
 
             <label for="address">Address:</label>
             <input type="text" id="address" name="address" required>
@@ -92,11 +104,27 @@
         <p id="reviewCarType"></p>
         <p id="reviewFuelType"></p>
         <p id="reviewMileage"></p>
+        <p id="reviewOwner"></p>
         <p id="reviewAddress"></p>
         <button class="confirm-btn" onclick="confirmPost()">Confirm Post</button>
     </div>
 
     <script>
+        function toggleUsedFields() {
+            const category = document.getElementById("carCategory").value;
+            const usedSection = document.getElementById("usedFields");
+
+            if (category === "Used") {
+                usedSection.style.display = "block";
+                document.getElementById("mileage").required = true;
+                document.getElementById("ownerId").required = true;
+            } else {
+                usedSection.style.display = "none";
+                document.getElementById("mileage").required = false;
+                document.getElementById("ownerId").required = false;
+            }
+        }
+
         document.getElementById("carForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
@@ -134,17 +162,20 @@
                     uploadedUrls.push(data.data.display_url);
                 }
 
-                const carDetails = {
-                    brand: e.target.brand.value,
-                    model: e.target.model.value,
-                    year: e.target.year.value,
-                    price: e.target.price.value,
-                    carType: e.target.carType.value,
-                    fuelType: e.target.fuelType.value,
-                    mileage: e.target.mileage.value,
-                    address: e.target.address.value,
-                    imageUrls: uploadedUrls
-                };
+                       const carDetails = {
+            condition: e.target.carCategory.value,  // "New" or "Used"
+            brand: e.target.brand.value,
+            model: e.target.model.value,
+            year: e.target.year.value,
+            price: e.target.price.value,
+            carType: e.target.carType.value,
+            fuelType: e.target.fuelType.value,
+            mileage: e.target.mileage ? e.target.mileage.value : null,
+            ownerId: e.target.ownerId ? e.target.ownerId.value : null,
+            address: e.target.address.value,
+            imageUrls: uploadedUrls
+        };
+
 
                 showReview(carDetails);
             } catch (err) {
@@ -173,14 +204,44 @@
             document.getElementById("reviewPrice").textContent = `Price: $${car.price}`;
             document.getElementById("reviewCarType").textContent = `Car Type: ${car.carType}`;
             document.getElementById("reviewFuelType").textContent = `Fuel Type: ${car.fuelType}`;
-            document.getElementById("reviewMileage").textContent = `Mileage: ${car.mileage} miles`;
+
+            document.getElementById("reviewMileage").textContent =
+                car.mileage ? `Mileage: ${car.mileage} miles` : '';
+            document.getElementById("reviewOwner").textContent =
+                car.ownerId ? `Owner ID: ${car.ownerId}` : '';
+
             document.getElementById("reviewAddress").textContent = `Address: ${car.address}`;
         }
 
-        function confirmPost() {
-            alert("Car posted successfully! (Simulation)");
-            location.reload(); // Reset the page
+                async function confirmPost() {
+            const car = {
+                condition: document.getElementById("carCategory").value,
+                brand: document.getElementById("brand").value,
+                model: document.getElementById("model").value,
+                year: document.getElementById("year").value,
+                price: document.getElementById("price").value,
+                carType: document.getElementById("carType").value,
+                fuelType: document.getElementById("fuelType").value,
+                mileage: document.getElementById("mileage")?.value || null,
+                ownerId: document.getElementById("ownerId")?.value || null,
+                address: document.getElementById("address").value,
+                imageUrls: Array.from(document.querySelectorAll("#imagePreview img")).map(img => img.src)
+            };
+
+            const response = await fetch("/Car/Create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(car)
+            });
+
+            if (response.ok) {
+                alert("Car posted successfully!");
+                location.href = "/Home/Index";
+            } else {
+                alert("Failed to post car. Try again.");
+            }
         }
+
     </script>
 </body>
 </html>

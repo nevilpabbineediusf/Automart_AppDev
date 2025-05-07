@@ -14,13 +14,19 @@
     <nav>
         <div class="logo-container">
             <img src="~/images/logo.png" alt="AutoDeals Logo" />
-            <div class="logo-text">AutoDeals</div>
+            
         </div>
     </nav>
 
     <section class="car-posting-form" style="max-width: 400px;">
         <h2 style="text-align:center;">Sign In</h2>
-        <form id="signinForm">
+
+        @if (ViewBag.Error != null)
+        {
+            <p style="color:red; text-align:center;">@ViewBag.Error</p>
+        }
+
+        <form asp-controller="Auth" asp-action="Signin" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
 
@@ -29,28 +35,11 @@
 
             <input type="submit" value="Sign In">
         </form>
+
         <p style="text-align:center; margin-top:1rem;">
-            Don't have an account? <a asp-controller="Home" asp-action="SignUp">Sign Up</a>
+            Don't have an account? <a asp-controller="Home" asp-action="Signup">Sign Up</a>
         </p>
     </section>
 
-    <script>
-        document.getElementById("signinForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const username = e.target.username.value.trim();
-            const password = e.target.password.value.trim();
-
-            // Dummy authentication (replace with real backend logic later)
-            if (username === "user1" && password === "pass123") {
-                alert("Sign-in successful!");
-                window.location.href = "/";  // Redirect to home
-            } else {
-                alert("Invalid username or password.");
-            }
-        });
-    </script>
-
 </body>
 </html>
-
