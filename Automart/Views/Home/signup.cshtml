@@ -21,22 +21,9 @@
 
     <section class="car-posting-form" style="max-width: 500px;">
         <h2 style="text-align:center;">Sign Up</h2>
-
-        @if (ViewBag.Error != null)
-        {
-            <p style="color:red; text-align:center;">@ViewBag.Error</p>
-        }
-
-        <form asp-controller="Auth" asp-action="Signup" method="post">
-            <label for="Username">Username:</label>
-            <input type="text" id="Username" name="Username" required>
-
-            <label for="Role">Role:</label>
-            <select id="Role" name="Role" required>
-                <option value="">-- Select Role --</option>
-                <option value="User">User</option>
-                <option value="Dealer">Dealer</option>
-            </select>
+        <form id="signupForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
 
             <label for="FirstName">First Name:</label>
             <input type="text" id="FirstName" name="FirstName" required>
@@ -66,3 +53,4 @@
 
 </body>
 </html>
+
