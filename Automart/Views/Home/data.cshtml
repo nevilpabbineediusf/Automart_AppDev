@@ -18,17 +18,16 @@
         <ul class="nav-links">
             <li><a asp-controller="Home" asp-action="Index">Home</a></li>
             <li><a asp-controller="Home" asp-action="Data" class="active">Cars Data</a></li>
-            <li><a asp-controller="Home" asp-action="Create">Create</a></li>
-            <li><a asp-controller="Home" asp-action="Read">Read</a></li>
-            <li><a asp-controller="Home" asp-action="Update">Update</a></li>
-            <li><a asp-controller="Home" asp-action="Delete">Delete</a></li>
+            <li><a asp-controller="Home" asp-action="Create">Create Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Read">Review Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Update">Modify Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Delete">Delete Posting</a></li>
             <li><a asp-controller="Home" asp-action="About">About Us</a></li>
         </ul>
         <div class="auth-links">
             <a asp-controller="Home" asp-action="SignIn">Sign In</a>
             <a asp-controller="Home" asp-action="SignUp">Sign Up</a>
         </div>
-
     </nav>
 
     <main>
@@ -38,11 +37,6 @@
             <h3>Car Listings by Brand</h3>
             <select id="brandSelect">
                 <option value="all">All Brands</option>
-                <option value="Honda">Honda</option>
-                <option value="Toyota">Toyota</option>
-                <option value="Ford">Ford</option>
-                <option value="Tesla">Tesla</option>
-                <option value="Hyundai">Hyundai</option>
             </select>
             <canvas id="barChart" style="max-width: 600px; height: 300px;"></canvas>
         </section>
@@ -55,12 +49,8 @@
         </section>
 
         <section>
-            <h3>Monthly Sales Trend</h3>
-            <select id="metricSelect">
-                <option value="revenue">Revenue (₹ Lakhs)</option>
-                <option value="units">Units Sold</option>
-            </select>
-            <canvas id="lineChart" style="max-width: 600px; height: 300px;"></canvas>
+            <h3>Inventory by Year</h3>
+            <canvas id="inventoryChart" style="max-width: 600px; height: 300px;"></canvas>
         </section>
     </main>
 
@@ -69,94 +59,119 @@
     </footer>
 
     <script>
-        // Bar Chart Data
-        const barChartData = {
-            labels: ['Honda', 'Hyundai', 'Tesla', 'Ford', 'Toyota'],
-            values: [8, 6, 4, 3, 2]
-        };
+        let barChart, pieChart, inventoryChart;
 
-        const ctxBar = document.getElementById('barChart');
-        const barChart = new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: barChartData.labels,
-                datasets: [{
-                    label: 'Listings Available',
-                    data: barChartData.values,
-                    backgroundColor: ['#f44336', '#2196f3', '#4caf50', '#ff9800', '#9c27b0']
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
+        fetch("/CarListing/GetAllCars")
+            .then(res => res.json())
+            .then(data => {
+                const brandCounts = {};
+                const fuelCounts = {};
+                const yearCounts = {};
+
+                data.forEach(car => {
+                    const brand = car.brand;
+                    brandCounts[brand] = (brandCounts[brand] || 0) + 1;
+
+                    const fuel = car.fuelType;
+                    fuelCounts[fuel] = (fuelCounts[fuel] || 0) + 1;
+
+                    const year = car.year;
+                    yearCounts[year] = (yearCounts[year] || 0) + 1;
+                });
+
+                // --- Brand Bar Chart ---
+                const brandLabels = Object.keys(brandCounts);
+                const brandData = brandLabels.map(b => brandCounts[b]);
+
+                barChart = new Chart(document.getElementById('barChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: brandLabels,
+                        datasets: [{
+                            label: 'Listings Available',
+                            data: brandData,
+                            backgroundColor: getColorPalette(brandLabels.length)
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+
+                const brandSelect = document.getElementById('brandSelect');
+                brandLabels.forEach(b => {
+                    const option = document.createElement("option");
+                    option.value = b;
+                    option.textContent = b;
+                    brandSelect.appendChild(option);
+                });
+
+                brandSelect.addEventListener('change', function () {
+                    const selected = this.value;
+                    if (selected === 'all') {
+                        barChart.data.labels = brandLabels;
+                        barChart.data.datasets[0].data = brandData;
+                    } else {
+                        const index = brandLabels.indexOf(selected);
+                        barChart.data.labels = [brandLabels[index]];
+                        barChart.data.datasets[0].data = [brandData[index]];
+                    }
+                    barChart.update();
+                });
+
+                // --- Fuel Pie Chart ---
+                const fuelLabels = Object.keys(fuelCounts);
+                const fuelData = fuelLabels.map(f => fuelCounts[f]);
+
+                pieChart = new Chart(document.getElementById('pieChart'), {
+                    type: 'pie',
+                    data: {
+                        labels: fuelLabels,
+                        datasets: [{
+                            data: fuelData,
+                            backgroundColor: getColorPalette(fuelLabels.length)
+                        }]
+                    },
+                    options: { responsive: true }
+                });
+
+                // --- Year Line Chart ---
+                const yearLabels = Object.keys(yearCounts).sort();
+                const yearData = yearLabels.map(y => yearCounts[y]);
+
+                inventoryChart = new Chart(document.getElementById('inventoryChart'), {
+                    type: 'line',
+                    data: {
+                        labels: yearLabels,
+                        datasets: [{
+                            label: 'Cars in Inventory',
+                            data: yearData,
+                            borderColor: '#2196f3',
+                            fill: false,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            })
+            .catch(err => console.error("Failed to load chart data:", err));
+
+        // Ensure unique colors
+        function getColorPalette(n) {
+            const baseColors = [
+                '#f44336', '#2196f3', '#4caf50', '#ff9800', '#9c27b0',
+                '#795548', '#607d8b', '#00bcd4', '#e91e63', '#cddc39'
+            ];
+            const result = [];
+            for (let i = 0; i < n; i++) {
+                result.push(baseColors[i % baseColors.length]);
             }
-        });
-
-        document.getElementById('brandSelect').addEventListener('change', function () {
-            const selected = this.value;
-            if (selected === 'all') {
-                barChart.data.labels = barChartData.labels;
-                barChart.data.datasets[0].data = barChartData.values;
-            } else {
-                const index = barChartData.labels.indexOf(selected);
-                barChart.data.labels = [barChartData.labels[index]];
-                barChart.data.datasets[0].data = [barChartData.values[index]];
-            }
-            barChart.update();
-        });
-
-        // Pie Chart
-        new Chart(document.getElementById('pieChart'), {
-            type: 'pie',
-            data: {
-                labels: ['Petrol', 'Diesel', 'Electric', 'Hybrid'],
-                datasets: [{
-                    label: 'Market Share',
-                    data: [45, 30, 15, 10],
-                    backgroundColor: ['#03a9f4', '#8bc34a', '#ff5722', '#9e9e9e']
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
-
-        // Line Chart
-        const lineChartData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-            revenue: [120, 160, 140, 170, 200],
-            units: [60, 75, 80, 95, 105]
-        };
-
-        const ctxLine = document.getElementById('lineChart');
-        const lineChart = new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: lineChartData.labels,
-                datasets: [{
-                    label: 'Revenue (₹ Lakhs)',
-                    data: lineChartData.revenue,
-                    borderColor: '#4caf50',
-                    fill: false,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-
-        document.getElementById('metricSelect').addEventListener('change', function () {
-            const selected = this.value;
-            lineChart.data.datasets[0].data = lineChartData[selected];
-            lineChart.data.datasets[0].label = selected === 'revenue' ? 'Revenue (₹ Lakhs)' : 'Units Sold';
-            lineChart.update();
-        });
+            return result;
+        }
     </script>
 </body>
 </html>
