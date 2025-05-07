@@ -8,6 +8,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AutoMart</title>
     <link rel="stylesheet" href="~/css/styles.css" />
+    <style>
+        /* Use a grid to evenly distribute four profiles in a single row */
+        .team-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 10px;
+        }
+
+        .member {
+            text-align: center;
+        }
+
+        .member-photo {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .member h3 {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .member p.role {
+            white-space: nowrap;
+            margin: 0 0 12px;
+            font-weight: normal;
+        }
+
+        .member p.contribution {
+            margin: 0 0 12px;
+            font-weight: normal;
+        }
+
+        .member p strong {
+            font-weight: bold;
+        }
+
+        /* GitHub link styling */
+        .repo-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+            .repo-container a {
+                font-size: 1.1em;
+                color: #2196f3;
+                text-decoration: none;
+                display: inline-block;
+                padding: 8px 12px;
+                border: 1px solid #2196f3;
+                border-radius: 4px;
+                transition: background-color 0.2s ease;
+            }
+
+                .repo-container a:hover {
+                    background-color: rgba(33, 150, 243, 0.1);
+                }
+    </style>
 </head>
 <body>
     <nav>
@@ -16,57 +80,60 @@
         </div>
         <ul class="nav-links">
             <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-            <li><a href="/data.html">Cars Data</a></li>
-            <li><a asp-controller="Home" asp-action="Create">Create</a></li>
-            <li><a asp-controller="Home" asp-action="Read">Read</a></li>
-            <li><a asp-controller="Home" asp-action="Update">Update</a></li>
-            <li><a asp-controller="Home" asp-action="Delete">Delete</a></li>
+            <li><a asp-controller="Home" asp-action="Data">Cars Data</a></li>
+            <li><a asp-controller="Home" asp-action="Create">Create Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Read">Review Cars</a></li>
+            <li><a asp-controller="Home" asp-action="Update">Modify Posting</a></li>
+            <li><a asp-controller="Home" asp-action="Delete">Delete Posting</a></li>
             <li><a asp-controller="Home" asp-action="About" class="active">About Us</a></li>
         </ul>
         <div class="auth-links">
             <a asp-controller="Home" asp-action="SignIn">Sign In</a>
             <a asp-controller="Home" asp-action="SignUp">Sign Up</a>
         </div>
-
     </nav>
 
     <main>
-        <h2 style="text-align:center;">Meet the Team</h2>
+        <h2 style="text-align:center;">Meet the Team (Group-3)</h2>
 
-        <section class="team-section" style="max-width: 800px; margin: auto; padding: 20px;">
+        <<section class="team-section">
             <div class="member">
-                <h3>Manikanta Reddy Reddyyeddy</h3>
-                <p><strong>Role:</strong> Worked on Home Page</p>
-                <p><strong>Contributions:</strong> Designed and developed the Home Page and Read Page.</p>
+                <img src="~/images/manikanta.jpeg" alt="Manikanta Reddy Reddyedyddy" class="member-photo" />
+                <h3>Manikanta Reddy Reddyedyddy</h3>
+                <p class="role"><strong>Role:</strong> Worked on Home page & search</p>
+                <p class="contribution"><strong>Contributions:</strong> Designed and developed the Home Page, features available on Home Page.</p>
             </div>
-
             <div class="member">
+                <img src="~/images/nevil.jpeg" alt="Nevil Pabbineedi" class="member-photo" />
                 <h3>Nevil Pabbineedi</h3>
-                <p><strong>Role:</strong> Worked on CRUD</p>
-                <p><strong>Contributions:</strong> Implemented Create, Update, Delete, and Sign-Up functionalities.</p>
+                <p class="role"><strong>Role:</strong> Worked on Backend & Integrations.</p>
+                <p class="contribution"><strong>Contributions:</strong> Worked on backend Operations and integration of backend with the frontend..</p>
             </div>
-
             <div class="member">
+                <img src="~/images/koushik.jpeg" alt="Sai Koushik Reddy Yeruva" class="member-photo" />
                 <h3>Sai Koushik Reddy Yeruva</h3>
-                <p><strong>Role:</strong> Worked on Data & JavaScript</p>
-                <p><strong>Contributions:</strong> Developed <code>cars.js</code>, designed the Logical Data Model, and created Cars Data Visualizations using Chart.js.</p>
+                <p class="role"><strong>Role:</strong> DataBase & Cloud Integrations</p>
+                <p class="contribution"><strong>Contributions:</strong> Worked on creating local model of database, later shifted to creating data base model and transporting the data followed by cloud integration. .</p>
             </div>
-
             <div class="member">
+                <img src="~/images/niharika.jpeg" alt="Niharika Allu" class="member-photo" />
                 <h3>Niharika Allu</h3>
-                <p><strong>Role:</strong> Worked on Authentication</p>
-                <p><strong>Contributions:</strong> Designed the About Page and Sign-In Page.</p>
+                <p class="role"><strong>Role:</strong> Visualisations & Presentations</p>
+                <p class="contribution"><strong>Contributions:</strong> Worked on creating the data visualisations and presentation deck.</p>
             </div>
         </section>
 
         <h2 style="text-align:center;">Logical Data Model</h2>
         <div style="text-align: center; margin-bottom: 40px;">
-            <img src="~/images/DataModel.jpeg" alt="Logical Data Model" style="max-width: 90%; border: 1px solid #ccc; padding: 10px; border-radius: 8px;" />
+            <img src="~/images/ER- Diagram.png" alt="Logical Data Model" style="max-width: 60%; height:auto; border: 1px solid #ccc; padding: 10px; border-radius: 8px;" />
             <p style="font-size: 0.95em;">The data model illustrates two key one-to-many relationships: <strong>Dealer ➝ Car</strong> and <strong>Car ➝ Create/Update/Delete</strong>.</p>
         </div>
 
-        <div style="text-align: center;">
-            <a href="https://github.com/nevilpabbineediusf/AutoMart_Group_3.git" target="_blank" style="font-size: 1.1em; color: #2196f3;">🔗 View our GitHub Repository</a>
+        <!-- GitHub Repository link -->
+        <div class="repo-container">
+            <a href="https://github.com/nevilpabbineediusf/Automart_AppDev.git" target="_blank">
+                🔗 View our GitHub Repository
+            </a>
         </div>
     </main>
 
